@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Yandex Maps Tile Calculator</title>
+  </head>
+  <body>
+    <form>
+      <label>Latitude:</label>
+      <input type="text" id="lat">
+      <br>
+      <label>Longitude:</label>
+      <input type="text" id="lon">
+      <br>
+      <button type="button" onclick="calculateTile()">Calculate Tile</button>
+    </form>
+    <div id="tile"></div>
+    <div id="coords"></div>
+    <script>
+      function calculateTile() {
+        const lat = parseFloat(document.getElementById('lat').value);
+        const lon = parseFloat(document.getElementById('lon').value);
+        const zoom = 19;
+        const [x, y] = getTileCoordinates(lat, lon, zoom);
+        document.getElementById('tile').innerHTML = `Tile coordinates: (${x}, ${y})`;
+        document.getElementById('coords').innerHTML = `Latitude: ${lat}, Longitude: ${lon}`;
+      }
+
+      function getTileCoordinates(lat, lon, zoom) {
+        const TILE_SIZE = 256;
+        const latRad = lat * Math.PI / 180;
+        const n = 2.0 ** zoom;
+        const x = Math.floor((lon + 180.0) / 360.0 * n);
+        const y = Math.floor((1.0 - Math.log(Math.tan(latRad) + 1 / Math.cos(latRad)) / Math.PI) / 2.0 * n);
+        return [x, y];
+      }
+    </script>
+  </body>
+</html>
